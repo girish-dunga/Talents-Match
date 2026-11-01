@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UX Talent Intelligence</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">UX</div>
+      <div>
+        <div class="brand-name">UX Talent Intelligence</div>
+        <div class="brand-sub">Practice resource fulfilment</div>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" data-view="home" aria-selected="true">Home</button>
+      <button class="tab" role="tab" data-view="assess" aria-selected="false">Demand match</button>
+      <button class="tab" role="tab" data-view="bench" aria-selected="false">Bench <span id="bench-count" class="chip"></span></button>
+      <button class="tab" role="tab" data-view="pipeline" aria-selected="false">Pipeline <span id="pipe-count" class="chip"></span></button>
+    </nav>
+    <div class="header-tools">
+      <button type="button" class="cmd-trigger" id="cmdk-open" aria-label="Open command bar"><span>Search…</span><kbd id="cmdk-key">⌘K</kbd></button>
+      <button type="button" class="icon-btn" id="theme-toggle" aria-label="Switch light or dark theme" title="Switch theme">◐</button>
+      <button class="tab tab-quiet" role="tab" data-view="framework" aria-selected="false">How it works</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="view-home" class="stack"></section>
+
+    <!-- New match -->
+    <section id="view-assess" class="stack hidden">
+      <div id="demand-strip" class="card demand-strip hidden"></div>
+      <div id="demand-form" class="stack">
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-head">
+            <h2>1. Demand / job description</h2>
+            <select id="jd-sample" aria-label="Load sample demand" style="width:auto">
+              <option value="">Load sample demand…</option>
+            </select>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="demand-id">Demand ID</label>
+              <input type="text" id="demand-id" placeholder="e.g. DMD-1042">
+            </div>
+            <div class="field">
+              <label for="account">Account / client</label>
+              <input type="text" id="account" placeholder="Account name">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field" style="flex:2 1 200px">
+              <label for="jd-title">Role / job title</label>
+              <input type="text" id="jd-title" placeholder="e.g. Lead UX Designer">
+            </div>
+            <div class="field">
+              <label for="demand-location">Location</label>
+              <input type="text" id="demand-location" placeholder="City / Remote">
+            </div>
+            <div class="field">
+              <label for="start-date">Required start</label>
+              <input type="date" id="start-date">
+            </div>
+          </div>
+          <label class="dropzone" data-target="jd-text" data-status="jd-file-status">
+            <input type="file" id="jd-file" accept=".pdf,.docx,.doc,.rtf,.odt,.txt,.md,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/rtf,application/vnd.oasis.opendocument.text,text/plain">
+            <span class="dz-icon" aria-hidden="true">⬆</span>
+            <span><b>Drop JD file here</b> or <u>browse</u></span>
+            <span class="dz-types">PDF · Word (.docx, .doc) · RTF · ODT · TXT</span>
+            <span id="jd-file-status" class="dz-status" role="status"></span>
+          </label>
+          <div class="field">
+            <label for="jd-text">Job description</label>
+            <textarea id="jd-text" placeholder="Upload the JD above, or paste it here — responsibilities, requirements, nice-to-haves…"></textarea>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>2. Resources to match</h2>
+            <div class="segmented" role="group" aria-label="Match against">
+              <button type="button" data-match-mode="bench" aria-pressed="true">Best fit from bench</button>
+              <button type="button" data-match-mode="single" aria-pressed="false">Single profile</button>
+            </div>
+          </div>
+          <div id="bench-panel"></div>
+          <div id="single-panel" class="hidden">
+          <div class="row" style="justify-content:flex-end;margin-bottom:8px">
+            <select id="profile-sample" aria-label="Load sample resource" style="width:auto">
+              <option value="">Load sample resource…</option>
+            </select>
+          </div>
+          <div class="row">
+            <div class="field" style="flex:2 1 200px">
+              <label for="cand-name">Resource name</label>
+              <input type="text" id="cand-name" placeholder="Full name">
+            </div>
+            <div class="field">
+              <label for="emp-id">Employee ID</label>
+              <input type="text" id="emp-id" placeholder="e.g. E10234">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="res-status">Current status</label>
+              <select id="res-status">
+                <option>Bench</option>
+                <option>Rolling off</option>
+                <option>Partially allocated</option>
+                <option>Allocated</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="available-from">Available from</label>
+              <input type="date" id="available-from">
+            </div>
+            <div class="field" style="flex:0 1 120px">
+              <label for="cand-years">Experience (yrs)</label>
+              <input type="number" id="cand-years" min="0" max="45" step="0.5" placeholder="Auto">
+            </div>
+          </div>
+          <label class="dropzone" data-target="profile-text" data-status="profile-file-status">
+            <input type="file" id="profile-file" accept=".pdf,.docx,.doc,.rtf,.odt,.txt,.md,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/rtf,application/vnd.oasis.opendocument.text,text/plain">
+            <span class="dz-icon" aria-hidden="true">⬆</span>
+            <span><b>Drop resource profile / résumé here</b> or <u>browse</u></span>
+            <span class="dz-types">PDF · Word (.docx, .doc) · RTF · ODT · TXT</span>
+            <span id="profile-file-status" class="dz-status" role="status"></span>
+          </label>
+          <div class="field">
+            <label for="profile-text">Profile text</label>
+            <textarea id="profile-text" placeholder="Upload the resource profile above, or paste the text here…"></textarea>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="assess-actions">
+          <div class="row" style="flex:1">
+            <div class="field" style="margin:0">
+              <label for="level-choice">Target role level</label>
+              <select id="level-choice"><option value="auto">Auto-detect from JD</option></select>
+            </div>
+            <div class="field" style="margin:0">
+              <label for="weight-mode">Competency weighting</label>
+              <select id="weight-mode"><option value="auto">Dynamic — derived from JD</option></select>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-lg" id="run">Find best fit from bench →</button>
+        </div>
+        <div id="assess-error" class="error" role="alert"></div>
+      </div>
+      </div>
+
+      <div id="ranking" class="stack"></div>
+    </section>
+
+    <section id="view-bench" class="stack hidden"></section>
+
+    <section id="view-results" class="stack hidden"></section>
+    <section id="view-pipeline" class="stack hidden"></section>
+    <section id="view-framework" class="stack hidden"></section>
+  </main>
+
+  <!-- Add / edit bench resource -->
+  <dialog id="bench-dialog" aria-labelledby="bench-dialog-title">
+    <form method="dialog" class="share-form" id="bench-form">
+      <div class="card-head" style="margin-bottom:6px">
+        <h2 id="bench-dialog-title">Add bench resource</h2>
+        <button class="btn btn-sm" value="cancel" formnovalidate aria-label="Close">✕</button>
+      </div>
+      <div class="row">
+        <div class="field" style="flex:2 1 200px"><label for="b-name">Name</label><input type="text" id="b-name" required></div>
+        <div class="field"><label for="b-emp">Employee ID</label><input type="text" id="b-emp"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label for="b-status">Status</label>
+          <select id="b-status"><option>Bench</option><option>Rolling off</option><option>Partially allocated</option><option>Allocated</option></select></div>
+        <div class="field"><label for="b-available">Available from</label><input type="date" id="b-available"></div>
+        <div class="field"><label for="b-location">Location</label><input type="text" id="b-location"></div>
+      </div>
+      <label class="dropzone" data-bench-file>
+        <input type="file" id="b-file" accept=".pdf,.docx,.doc,.rtf,.odt,.txt,.md">
+        <span><b>Drop profile here</b> or <u>browse</u></span>
+        <span class="dz-types">PDF · Word (.docx, .doc) · RTF · ODT · TXT</span>
+        <span id="b-file-status" class="dz-status" role="status"></span>
+      </label>
+      <div class="field"><label for="b-text">Profile text</label><textarea id="b-text" style="min-height:200px" required></textarea></div>
+      <div class="row" style="justify-content:flex-end">
+        <button class="btn" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn btn-primary" value="save" id="b-save">Save resource</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Share: account team (proposal) or the resource (development feedback) -->
+  <dialog id="share-dialog" aria-labelledby="share-title">
+    <form method="dialog" class="share-form">
+      <div class="card-head" style="margin-bottom:10px">
+        <h2 id="share-title">Share</h2>
+        <button class="btn btn-sm" value="close" aria-label="Close">✕</button>
+      </div>
+      <div class="audience" role="group" aria-label="Share with">
+        <button type="button" data-audience="account" aria-pressed="true"><b>Account team</b><span>Propose this resource for the demand</span></button>
+        <button type="button" data-audience="resource" aria-pressed="false"><b>The resource</b><span>Feedback on what to improve</span></button>
+      </div>
+      <p class="small muted" id="share-desc" style="margin-top:12px"></p>
+      <div class="field" style="margin-top:14px">
+        <label for="share-to" id="share-to-label">Email(s)</label>
+        <input type="text" id="share-to">
+      </div>
+      <div class="field">
+        <label for="share-subject">Subject</label>
+        <input type="text" id="share-subject">
+      </div>
+      <div class="field">
+        <label for="share-body">Message</label>
+        <textarea id="share-body" style="min-height:240px"></textarea>
+      </div>
+      <label class="toggle" style="margin-bottom:14px"><input type="checkbox" id="share-option" checked> <span id="share-option-text"></span></label>
+      <div class="share-steps">
+        <button type="button" class="btn btn-primary" data-share="pdf" id="share-pdf-btn">① Download report (PDF)</button>
+        <button type="button" class="btn" data-share="resume" id="share-resume-btn">② Download original résumé</button>
+        <button type="button" class="btn" data-share="email" id="share-email-btn">③ Open email draft</button>
+        <button type="button" class="btn" data-share="copy">Copy message</button>
+      </div>
+      <p class="hint" id="share-hint"></p>
+    </form>
+  </dialog>
+
+  <!-- Why was this proposal rejected? -->
+  <dialog id="reject-dialog" aria-labelledby="reject-title">
+    <form method="dialog" class="share-form">
+      <div class="card-head" style="margin-bottom:4px">
+        <h2 id="reject-title">Why was this proposal rejected?</h2>
+        <button class="btn btn-sm" value="cancel" formnovalidate aria-label="Cancel">✕</button>
+      </div>
+      <p class="small muted" id="reject-who"></p>
+      <fieldset class="reason-grid"><legend class="sr-only">Reason</legend><div id="reject-reasons"></div></fieldset>
+      <div class="field"><label for="reject-note">Note from the account (optional)</label><input type="text" id="reject-note" placeholder="e.g. wanted deeper fintech experience"></div>
+      <p class="hint" style="margin:0 0 12px">Reasons show up in the pipeline Summary, so you can spot patterns by demand, account or resource.</p>
+      <div class="row" style="justify-content:flex-end">
+        <button class="btn" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn" value="skip" formnovalidate>Reject without reason</button>
+        <button class="btn btn-primary" value="save">Mark as rejected</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Command bar -->
+  <dialog id="cmdk" aria-label="Command bar">
+    <input type="text" id="cmdk-input" placeholder="Type a demand, resource or action…" autocomplete="off" aria-controls="cmdk-list">
+    <ul id="cmdk-list" role="listbox"></ul>
+    <div class="cmdk-foot"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>Enter</kbd> run</span><span><kbd>Esc</kbd> close</span></div>
+  </dialog>
+
+  <div id="share-report" aria-hidden="true"></div>
+
+  <script src="js/framework.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/samples.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/fileparse.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
